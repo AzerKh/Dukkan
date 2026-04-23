@@ -8,6 +8,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 
 // Page d'accueil / Catalogue public
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -45,7 +46,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
-
+// Chat
+Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+Route::get('/chat/{userId}', [ChatController::class, 'show'])->name('chat.show')->where('userId', '[0-9]+');
+Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+Route::get('/chat/fetch', [ChatController::class, 'fetch'])->name('chat.fetch');
     // Profil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

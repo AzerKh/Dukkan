@@ -74,6 +74,14 @@
             <p class="text-sm text-gray-500">
                 Vendu par : <span class="font-semibold">{{ $product->user->name }}</span>
             </p>
+            @auth
+                @if(Auth::id() !== $product->user_id)
+                    <a href="{{ route('chat.show', $product->user_id) }}"
+                       class="inline-flex items-center gap-2 border-2 border-purple-500 text-purple-600 hover:bg-purple-50 px-4 py-2 rounded-xl font-semibold transition mt-3">
+                        💬 Contacter le vendeur
+                    </a>
+                @endif
+            @endauth
         </div>
     </div>
 </div>
@@ -145,4 +153,46 @@
         <p class="text-gray-500">Aucun avis pour ce produit.</p>
     @endforelse
 </div>
+<!-- Produits similaires -->
+@if($similarProducts->count() > 0)
+<div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">🔥 Produits similaires</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        @foreach($similarProducts as $similar)
+            <div class="bg-white rounded-2xl shadow hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                <!-- Image -->
+                @if($similar->image)
+                    <div class="overflow-hidden h-48">
+                        <img src="{{ $similar->image_url }}"
+                            alt="{{ $similar->title }}"
+                            class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                @else
+                    <div class="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
+                        <span class="text-5xl">📦</span>
+                    </div>
+                @endif
+
+                <div class="p-4">
+                    <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">
+                        {{ $similar->category->name }}
+                    </span>
+                    <h3 class="font-semibold text-gray-800 mt-2 text-sm">
+                        {{ Str::limit($similar->title, 40) }}
+                    </h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="font-bold text-indigo-600">
+                            {{ number_format($similar->price, 2) }} TND
+                        </span>
+                        <a href="{{ route('products.show', $similar) }}"
+                            class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-indigo-700 transition">
+                            Voir →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+@endif
 @endsection

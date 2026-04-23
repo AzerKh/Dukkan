@@ -56,11 +56,19 @@ class ProductController extends Controller
     }
 
     public function show(Product $product)
-    {
-        $reviews = $product->reviews()->with('user')->get();
-        $avgRating = $reviews->avg('rating');
-        return view('products.show', compact('product', 'reviews', 'avgRating'));
-    }
+{
+    $reviews = $product->reviews()->with('user')->get();
+    $avgRating = $reviews->avg('rating');
+    
+    // Produits similaires (même catégorie, sauf le produit actuel)
+    $similarProducts = Product::where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id)
+        ->where('is_active', true)
+        ->take(4)
+        ->get();
+
+    return view('products.show', compact('product', 'reviews', 'avgRating', 'similarProducts'));
+}
 
     public function edit(Product $product)
     {

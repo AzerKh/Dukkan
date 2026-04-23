@@ -106,7 +106,13 @@
                                 <span class="text-xs">Wishlist</span>
                             </div>
                         </a>
-
+<!-- Chat  ← AJOUTER ICI -->
+<a href="{{ route('chat.index') }}" class="text-white nav-link">
+    <div class="flex flex-col items-center">
+        <span class="text-2xl">💬</span>
+        <span class="text-xs">Chat</span>
+    </div>
+</a>
                         <!-- User Dropdown -->
                         <div class="relative group">
                             <button class="flex items-center gap-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-xl transition">
